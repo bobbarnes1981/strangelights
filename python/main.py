@@ -3,7 +3,8 @@ import board
 import neopixel
 
 pixel_pin = board.D18
-num_pixels = 26
+num_letters = 26
+num_pixels = 50
 
 letters = {
     "A":  0,
@@ -35,14 +36,29 @@ letters = {
 }
 
 def on(p):
-    for i in range(26):
-        pixels[i] = colours[i]
-    pixels.show()
+    j = 0
+    for i in range(num_pixels):
+        j += 1
+        if j >= num_letters:
+            j -= num_letters
+        p[i] = colours[j]
+    p.show()
 
 def off(p):
-    for i in range(26):
-        pixels[i] = (0,0,0)
-    pixels.show()
+    for i in range(num_pixels):
+        p[i] = (0,0,0)
+    p.show()
+
+def trail(p, speed):
+    j = 0
+    for i in range(num_pixels):
+        j += 1
+        if j >= num_letters:
+            j -= num_letters
+        p[i] = colours[j]
+        p.show()
+        print(i, colours[j])
+        time.sleep(speed)
 
 def flicker(p, count, speed):
     x = False
@@ -50,7 +66,7 @@ def flicker(p, count, speed):
         if x:
             p.brightness = 0
         else:
-            p.brightness = 0.2
+            p.brightness = brightness
         p.show()
         time.sleep(speed)
         x = not x
@@ -119,6 +135,23 @@ flicker(pixels, 2, 0.2)
 off(pixels)
 
 show(pixels, "RUN")
+
+on(pixels)
+flicker(pixels, 3, 0.1)
+flicker(pixels, 2, 0.2)
+off(pixels)
+
+show(pixels, "RUN")
+
+on(pixels)
+flicker(pixels, 10, 0.15)
+off(pixels)
+
+pixels.brightness = brightness
+for i in range(10):
+    trail(pixels, 0.1)
+    time.sleep(1)
+    off(pixels)
 
 #pixels.fill((0,0,0))
 #pixels.show()
