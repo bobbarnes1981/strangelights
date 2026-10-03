@@ -7,32 +7,34 @@ num_letters = 26
 num_pixels = 50
 
 letters = {
-    "A":  0,
-    "B":  1,
-    "C":  2,
-    "D":  3,
-    "E":  4,
-    "F":  5,
-    "G":  6,
-    "H":  7,
-    "Q":  8,
-    "P":  9,
-    "O": 10,
-    "N": 11,
-    "M": 12,
-    "L": 13,
-    "K": 14,
-    "J": 15,
-    "I": 16,
-    "R": 17,
-    "S": 18,
-    "T": 19,
-    "U": 21,
-    "V": 21,
-    "W": 22,
-    "X": 23,
-    "Y": 24,
-    "Z": 25,
+    "A":  2,
+    "B":  3,
+    "C":  4,
+    "D":  5,
+    "E":  6,
+    "F":  7,
+    "G":  8,
+    "H":  9,
+
+    "Q": 16,
+    "P": 17,
+    "O": 18,
+    "N": 19,
+    "M": 20,
+    "L": 21,
+    "K": 22,
+    "J": 23,
+    "I": 24,
+
+    "R": 30,
+    "S": 31,
+    "T": 32,
+    "U": 33,
+    "V": 34,
+    "W": 35,
+    "X": 36,
+    "Y": 37,
+    "Z": 38,
 }
 
 def on(p):
@@ -41,7 +43,7 @@ def on(p):
         j += 1
         if j >= num_letters:
             j -= num_letters
-        p[i] = colours[j]
+        p[i] = get_colour(j)
     p.show()
 
 def off(p):
@@ -55,9 +57,9 @@ def trail(p, speed):
         j += 1
         if j >= num_letters:
             j -= num_letters
-        p[i] = colours[j]
+        p[i] = get_colour(j)
         p.show()
-        print(i, colours[j])
+        print(i, get_colour(j))
         time.sleep(speed)
 
 def flicker(p, count, speed):
@@ -75,8 +77,8 @@ def show(p, word):
     for l in word:
         print(l)
         print(letters[l])
-        print(colours[letters[l]])
-        p[letters[l]] = colours[letters[l]]
+        print(get_colour(letters[l]))
+        p[letters[l]] = get_colour(letters[l])
         flicker(p, 20, 0.01)
         flicker(p, 10, 0.02)
         flicker(p,  5, 0.04)
@@ -88,37 +90,18 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 
 colours = [
-    YELLOW, # A
-    BLUE,   # B
-    RED,    # C
-    GREEN,  # D
-    BLUE,   # E
-    YELLOW, # F
-    RED,    # G
-    GREEN,  # H
-    RED,    # Q
-    GREEN,  # P
-    RED,    # O
-    RED,    # N
-    YELLOW, # M
-    GREEN,  # L
-    BLUE,   # K
-    RED,    # J
-    GREEN,  # I
-    GREEN,  # R
-    BLUE,   # S
-    YELLOW, # T
-    BLUE,   # U
-    RED,    # V
-    BLUE,   # W
-    YELLOW, # X
-    RED,    # Y
-    RED,    # Z
+    YELLOW,
+    BLUE,
+    RED,
+    GREEN,
 ]
+
+def get_colour(num: int) -> tuple[int]:
+    return colours[num % len(colours)]
 
 order = neopixel.RGB
 
-brightness = 0.2
+brightness = 0.6 #0.2
 
 pixels = neopixel.NeoPixel(
     pixel_pin,
@@ -127,6 +110,10 @@ pixels = neopixel.NeoPixel(
     auto_write=False,
     pixel_order=order
 )
+
+#show(pixels, "ABCDEFGH")
+#show(pixels, "IJKLMNOPQ")
+#show(pixels, "RSTUVWXYZ")
 
 on(pixels)
 flicker(pixels, 2, 0.1)
@@ -147,11 +134,12 @@ on(pixels)
 flicker(pixels, 10, 0.15)
 off(pixels)
 
-pixels.brightness = brightness
-for i in range(10):
-    trail(pixels, 0.1)
-    time.sleep(1)
-    off(pixels)
+#pixels.brightness = brightness
+#for i in range(10):
+#    trail(pixels, 0.1)
+#    time.sleep(1)
+#    off(pixels)
 
 #pixels.fill((0,0,0))
 #pixels.show()
+
